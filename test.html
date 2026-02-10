@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Müzik Test</title>
+</head>
+<body>
+    <h1>Müzik Testi</h1>
+    
+    <!-- Müzik -->
+    <audio id="bgMusic" controls>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+    
+    <p>Yukarıdaki play butonuna tıkla. Müzik çalıyorsa dosya doğru yerde.</p>
+    
+    <script>
+        const audio = document.getElementById('bgMusic');
+        audio.volume = 0.5;
+        
+        // Otomatik başlatmayı dene
+        setTimeout(() => {
+            audio.play().then(() => {
+                console.log("Müzik çalıyor!");
+            }).catch(e => {
+                console.log("Otomatik başlatma hatası:", e);
+            });
+        }, 1000);
+    </script>
+</body>
+</html>

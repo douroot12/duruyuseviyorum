@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adoşşş 💖</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Overlay Effects -->
+    <div class="effect-overlay" id="damage-overlay"></div>
+    <div class="damage-edge left"></div>
+    <div class="damage-edge right"></div>
+    <div class="damage-edge top"></div>
+    <div class="damage-edge bottom"></div>
+    
+    
+    <!-- Floating Hearts Background -->
+    <div class="floating-hearts-container" id="floatingHearts"></div>
+    
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="heart-container">
+            <div class="heart-pulse">❤️</div>
+        </div>
+        
+        <h1 class="main-title">Barisalimmi<span class="heart-emoji">💕</span></h1>
+        <p class="subtitle">lütfen :(</p>
+        
+        <div class="buttons-container">
+            <button class="btn btn-yes" id="evetBtn">
+                <span class="btn-content">
+                    <span class="btn-text">EVET BARİSALİM</span>
+                    <span class="btn-emoji">💖</span>
+                </span>
+            </button>
+            <button class="btn btn-no" id="hayirBtn">
+                <span class="btn-content">
+                    <span class="btn-text">Git</span>
+                    <span class="btn-emoji broken-heart">💔</span>
+                </span>
+            </button>
+        </div>
+        
+        <!-- Müzik Kontrolleri -->
+        <div class="music-controls">
+            <button id="musicToggle" class="music-btn">
+                <span class="music-icon">🎵</span>
+                <span class="music-text">Müzik: AÇ</span>
+            </button>
+        </div>
+        
+        <!-- COUNTER KALDIRILDI -->
+    </main>
+    
+    <!-- White Screen Transition -->
+    <div class="transition-screen" id="white-screen"></div>
+    
+    <!-- Heart Explosion -->
+    <div class="heart-explosion-container" id="heartExplosion"></div>
+    
+    <!-- New Containers for Effects -->
+    <div class="heart-rain-container" id="heartRain"></div>
+    <div class="giant-heart-container" id="giantHeart"></div>
+    
+    <!-- Final Screen -->
+    <div class="final-screen" id="son-ekran">
+        <div class="final-content">
+            <div class="final-heart">💖</div>
+            <h1 class="final-title">Oleyyyy!😍<span class="final-emoji">🥰</span></h1>
+            <p class="final-message">Senicokseviyorummmm muaaah</p>
+        </div>
+    </div>
+    
+    <!-- Made By Dou -->
+    <div class="made-by-dou">MADE BY DOU</div>
+    
+    <!-- Audio Elements -->
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+        Tarayıcın müzik desteklemiyor
+    </audio>
+    
+    <audio id="heartbeatLoop" loop preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/265/265-preview.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sadSound" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/269/269-preview.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="happySound" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/257/257-preview.mp3" type="audio/mpeg">
+    </audio>
+    
+    <!-- JavaScript -->
+    <script src="script.js" type="module"></script>
+</body>
+</html>

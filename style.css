@@ -1,0 +1,887 @@
+/* Reset ve Temel Stiller */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Renkler */
+    --color-primary: #ff6b6b;
+    --color-secondary: #ff8e8e;
+    --color-accent: #e63946;
+    --color-dark: #d00000;
+    --color-light: #fff0f0;
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-overlay: rgba(139, 0, 0, 0.35);
+    
+    /* Tipografi */
+    --font-primary: 'Poppins', sans-serif;
+    --font-secondary: 'Dancing Script', cursive;
+    
+    /* Animasyon Süreleri */
+    --transition-fast: 0.3s;
+    --transition-medium: 0.5s;
+    --transition-slow: 0.8s;
+    
+    /* Shadow */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4);
+    
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 50px;
+    --radius-full: 9999px;
+}
+
+body {
+    font-family: var(--font-primary);
+    color: var(--color-white);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    position: relative;
+    touch-action: manipulation;
+}
+
+/* Overlay Efektleri */
+.effect-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 800;
+    opacity: 0;
+    background: radial-gradient(circle at 50% 50%, transparent 50%, var(--color-overlay) 80%);
+    mix-blend-mode: multiply;
+    transition: opacity var(--transition-slow) cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.effect-overlay.active {
+    opacity: 1;
+}
+
+.damage-edge {
+    position: fixed;
+    pointer-events: none;
+    z-index: 799;
+    opacity: 0;
+    background: linear-gradient(to bottom, rgba(139, 0, 0, 0.45), transparent);
+    box-shadow: 0 0 15px rgba(139, 0, 0, 0.4);
+    transition: opacity var(--transition-fast) ease, transform 0.9s cubic-bezier(0.34, 0.16, 0.3, 1);
+}
+
+.damage-edge.active {
+    opacity: 0.7;
+    transform: scale(1.15);
+}
+
+.damage-edge.left {
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 60px;
+    transform-origin: left;
+}
+
+.damage-edge.right {
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 60px;
+    transform-origin: right;
+    background: linear-gradient(to bottom, transparent, rgba(139, 0, 0, 0.45));
+}
+
+.damage-edge.top {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    transform-origin: top;
+    background: linear-gradient(to right, rgba(139, 0, 0, 0.45), transparent);
+}
+
+.damage-edge.bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    transform-origin: bottom;
+    background: linear-gradient(to right, transparent, rgba(139, 0, 0, 0.45));
+}
+
+/* Animasyonlar */
+@keyframes smoothShake {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    10% { transform: translate(4px, -3px) rotate(0.3deg); }
+    20% { transform: translate(-3px, 3px) rotate(-0.3deg); }
+    30% { transform: translate(3px, -2px) rotate(0.2deg); }
+    40% { transform: translate(-4px, 3px) rotate(-0.2deg); }
+    50% { transform: translate(2px, -3px) rotate(0.2deg); }
+    60% { transform: translate(-3px, 2px) rotate(-0.2deg); }
+    70% { transform: translate(3px, -2px) rotate(0.1deg); }
+    80% { transform: translate(-2px, 2px) rotate(-0.1deg); }
+    90% { transform: translate(1px, -1px) rotate(0.1deg); }
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(1); }
+    75% { transform: scale(0.94); }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(110vh) translateX(-15vw) rotate(0deg);
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.6;
+    }
+    80% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(-25vh) translateX(20vw) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes ashDisappear {
+    0% {
+        opacity: 1;
+        transform: scale(1) translate(0, 0) rotate(0deg);
+        filter: blur(0px);
+    }
+    35% {
+        opacity: 0.9;
+        transform: scale(1.05) translate(0, -6px) rotate(3deg);
+        filter: blur(1px);
+    }
+    70% {
+        opacity: 0.5;
+        transform: scale(0.8) translate(0, 20px) rotate(-6deg);
+        filter: blur(4px);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.2) translate(0, 60px) rotate(40deg);
+        filter: blur(14px);
+    }
+}
+
+/* BÜYÜK KALP ANİMASYONU */
+@keyframes giantHeartPulse {
+    0% {
+        font-size: 0px;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.1);
+        color: #ff6b6b;
+    }
+    20% {
+        font-size: 100px;
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+        color: #ff8e8e;
+    }
+    40% {
+        font-size: 200px;
+        color: #ff4d6d;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    60% {
+        font-size: 300px;
+        color: #e63946;
+        transform: translate(-50%, -50%) scale(1.4);
+    }
+    80% {
+        font-size: 400px;
+        color: #ff0066;
+        transform: translate(-50%, -50%) scale(1.6);
+        opacity: 0.9;
+    }
+    100% {
+        font-size: 500px;
+        color: #ff0000;
+        transform: translate(-50%, -50%) scale(1.8);
+        opacity: 0;
+    }
+}
+
+/* KALP YAĞMURU */
+@keyframes heartRainFall {
+    0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* ORTAYA GELEN KALPLER */
+@keyframes convergeToCenter {
+    0% {
+        transform: translate(var(--startX), var(--startY)) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(0, 0) scale(0);
+        opacity: 0;
+    }
+}
+
+.shake-active {
+    animation: smoothShake 0.8s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+}
+
+/* Floating Hearts */
+.floating-hearts-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.float-heart {
+    position: absolute;
+    font-size: clamp(16px, 2vw, 24px);
+    color: rgba(255, 255, 255, 0.4);
+    animation: float linear infinite;
+    will-change: transform, opacity;
+    user-select: none;
+}
+
+/* Main Content */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    max-width: 800px;
+    width: 100%;
+    z-index: 10;
+    position: relative;
+}
+
+.heart-container {
+    margin-bottom: 1.5rem;
+}
+
+.heart-pulse {
+    font-size: clamp(50px, 12vw, 80px);
+    animation: heartbeat 1.8s infinite;
+    display: inline-block;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.main-title {
+    font-size: clamp(2rem, 6vw, 3rem);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    font-family: var(--font-secondary);
+}
+
+.heart-emoji {
+    display: inline-block;
+    animation: heartbeat 2s infinite;
+}
+
+.subtitle {
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    margin-bottom: 2rem;
+    opacity: 0.9;
+    font-weight: 300;
+}
+
+/* Buttons */
+.buttons-container {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+}
+
+.btn {
+    padding: 1rem 2.5rem;
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-medium) cubic-bezier(0.34, 0.16, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-width: 140px;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.btn-yes {
+    background: var(--color-white);
+    color: var(--color-accent);
+}
+
+.btn-yes:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    background: var(--color-light);
+}
+
+.btn-no {
+    background: var(--color-dark);
+    color: var(--color-white);
+}
+
+.btn-no.running {
+    position: absolute;
+}
+
+.btn-no:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    background: #b80000;
+}
+
+.ash-fade {
+    animation: ashDisappear 1.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    pointer-events: none;
+}
+
+.ash-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #4a0000;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(139, 0, 0, 0.6);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 12;
+}
+
+/* YENİ EFEKTLER */
+/* Büyük Kalp */
+.giant-heart {
+    position: fixed;
+    font-size: 0;
+    z-index: 950;
+    pointer-events: none;
+    animation: giantHeartPulse 2.5s cubic-bezier(0.34, 0.16, 0.3, 1) forwards;
+    filter: drop-shadow(0 0 30px rgba(255, 107, 107, 0.8));
+    left: 50%;
+    top: 50%;
+}
+
+/* Kalp Yağmuru */
+.heart-rain-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 940;
+    overflow: hidden;
+}
+
+.heart-rain {
+    position: absolute;
+    font-size: 24px;
+    opacity: 0;
+    animation: heartRainFall 3s linear forwards;
+}
+
+/* Orta Kalpler */
+.converge-heart {
+    position: fixed;
+    font-size: 30px;
+    z-index: 945;
+    pointer-events: none;
+    animation: convergeToCenter 1.5s ease-out forwards;
+    left: 50%;
+    top: 50%;
+}
+
+/* Transition Screen */
+.transition-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--color-white);
+    z-index: 900;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-slow) cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.transition-screen.show {
+    opacity: 1;
+}
+
+/* Heart Explosion */
+.heart-explosion-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 935;
+}
+
+.heart-particle {
+    position: absolute;
+    font-size: 20px;
+    pointer-events: none;
+    z-index: 936;
+}
+
+/* Final Screen */
+.final-screen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #ff4d6d, #ff8e8e);
+    z-index: 960;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+.final-screen.show {
+    display: flex;
+}
+
+.final-content {
+    text-align: center;
+    padding: 2rem;
+    max-width: 600px;
+    animation: slideUp 1s ease forwards;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.final-heart {
+    font-size: clamp(80px, 16vw, 120px);
+    margin-bottom: 1.5rem;
+    animation: heartbeat 1.5s infinite;
+}
+
+.final-title {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-family: var(--font-secondary);
+}
+
+.final-message {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    margin-bottom: 1rem;
+    opacity: 0.9;
+}
+
+.love-message {
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+    font-weight: bold;
+    margin-bottom: 2rem;
+    color: var(--color-light);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.btn-restart {
+    background: var(--color-white);
+    color: var(--color-accent);
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    padding: 0.8rem 2rem;
+}
+
+.btn-restart:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .buttons-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .btn {
+        width: 100%;
+        max-width: 280px;
+    }
+    
+    .main-container {
+        padding: 1rem;
+    }
+    
+    /* Mobil için büyük kalp boyutlarını küçült */
+    @keyframes giantHeartPulse {
+        0% {
+            font-size: 0px;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.1);
+            color: #ff6b6b;
+        }
+        20% {
+            font-size: 60px;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            color: #ff8e8e;
+        }
+        40% {
+            font-size: 120px;
+            color: #ff4d6d;
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+        60% {
+            font-size: 180px;
+            color: #e63946;
+            transform: translate(-50%, -50%) scale(1.4);
+        }
+        80% {
+            font-size: 240px;
+            color: #ff0066;
+            transform: translate(-50%, -50%) scale(1.6);
+            opacity: 0.9;
+        }
+        100% {
+            font-size: 300px;
+            color: #ff0000;
+            transform: translate(-50%, -50%) scale(1.8);
+            opacity: 0;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .heart-pulse {
+        font-size: clamp(40px, 10vw, 60px);
+    }
+    
+    .main-title {
+        font-size: clamp(1.5rem, 5vw, 2rem);
+    }
+    
+    .subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 1.1rem;
+    }
+}
+/* ===== MADE BY DOU ===== */
+.made-by-dou {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-family: 'Montserrat', 'Arial Black', 'Impact', sans-serif;
+    font-weight: 900;
+    font-size: 1rem;
+    color: #ffffff;
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.7),
+        0 0 20px rgba(255, 255, 255, 0.4),
+        0 0 30px rgba(255, 255, 255, 0.2),
+        2px 2px 4px rgba(0, 0, 0, 0.5);
+    letter-spacing: 1.2px;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    z-index: 9999;
+    animation: glow 2s ease-in-out infinite alternate;
+    backdrop-filter: blur(5px);
+    user-select: none;
+    transition: all 0.3s ease;
+}
+
+.made-by-dou:hover {
+    transform: scale(1.05);
+    background: rgba(0, 0, 0, 0.35);
+    text-shadow: 
+        0 0 15px rgba(255, 255, 255, 0.9),
+        0 0 25px rgba(255, 255, 255, 0.6),
+        0 0 35px rgba(255, 255, 255, 0.3),
+        3px 3px 6px rgba(0, 0, 0, 0.6);
+}
+
+/* Responsive ayarları */
+@media (max-width: 768px) {
+    .made-by-dou {
+        font-size: 0.85rem;
+        padding: 8px 16px;
+        bottom: 15px;
+        right: 15px;
+        background: rgba(0, 0, 0, 0.35);
+    }
+}
+
+@media (max-width: 480px) {
+    .made-by-dou {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+        bottom: 10px;
+        right: 10px;
+    }
+}
+/* ===== MADE BY DOU ===== */
+.made-by-dou {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-family: 'Montserrat', 'Arial Black', 'Impact', sans-serif;
+    font-weight: 900;
+    font-size: 1rem;
+    color: #ffffff;
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.7),
+        0 0 20px rgba(255, 255, 255, 0.4),
+        0 0 30px rgba(255, 255, 255, 0.2),
+        2px 2px 4px rgba(0, 0, 0, 0.5);
+    letter-spacing: 1.2px;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    z-index: 9999;
+    animation: glow 2s ease-in-out infinite alternate;
+    backdrop-filter: blur(5px);
+    user-select: none;
+    transition: all 0.3s ease;
+}
+
+.made-by-dou:hover {
+    transform: scale(1.05);
+    background: rgba(0, 0, 0, 0.35);
+    text-shadow: 
+        0 0 15px rgba(255, 255, 255, 0.9),
+        0 0 25px rgba(255, 255, 255, 0.6),
+        0 0 35px rgba(255, 255, 255, 0.3),
+        3px 3px 6px rgba(0, 0, 0, 0.6);
+}
+
+@media (max-width: 768px) {
+    .made-by-dou {
+        font-size: 0.85rem;
+        padding: 8px 16px;
+        bottom: 15px;
+        right: 15px;
+        background: rgba(0, 0, 0, 0.35);
+    }
+}
+
+@media (max-width: 480px) {
+    .made-by-dou {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+        bottom: 10px;
+        right: 10px;
+    }
+}
+/* ===== MÜZİK KONTROLLERİ ===== */
+.music-controls {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9998;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px 15px;
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.music-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    min-width: 120px;
+    justify-content: center;
+}
+
+.music-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.05);
+}
+
+.music-btn.playing {
+    background: rgba(255, 107, 107, 0.3);
+    box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
+}
+
+.music-icon {
+    font-size: 1.2rem;
+}
+
+.music-text {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Responsive ayarlar */
+@media (max-width: 768px) {
+    .music-controls {
+        top: 15px;
+        right: 15px;
+        padding: 8px 12px;
+    }
+    
+    .music-btn {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+        min-width: 100px;
+    }
+    
+    .music-text {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .music-controls {
+        top: 10px;
+        right: 10px;
+        padding: 6px 10px;
+    }
+    
+    .music-btn {
+        min-width: 80px;
+        padding: 5px 8px;
+    }
+    
+    .music-text {
+        display: none; /* Mobilde sadece ikon */
+    }
+}
+
+/* ===== MADE BY DOU ===== */
+.made-by-dou {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-family: 'Montserrat', 'Arial Black', 'Impact', sans-serif;
+    font-weight: 900;
+    font-size: 1rem;
+    color: #ffffff;
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.7),
+        0 0 20px rgba(255, 255, 255, 0.4),
+        0 0 30px rgba(255, 255, 255, 0.2),
+        2px 2px 4px rgba(0, 0, 0, 0.5);
+    letter-spacing: 1.2px;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    z-index: 9999;
+    animation: glow 2s ease-in-out infinite alternate;
+    backdrop-filter: blur(5px);
+    user-select: none;
+    transition: all 0.3s ease;
+}
+
+.made-by-dou:hover {
+    transform: scale(1.05);
+    background: rgba(0, 0, 0, 0.35);
+    text-shadow: 
+        0 0 15px rgba(255, 255, 255, 0.9),
+        0 0 25px rgba(255, 255, 255, 0.6),
+        0 0 35px rgba(255, 255, 255, 0.3),
+        3px 3px 6px rgba(0, 0, 0, 0.6);
+}
+
+@media (max-width: 768px) {
+    .made-by-dou {
+        font-size: 0.85rem;
+        padding: 8px 16px;
+        bottom: 15px;
+        right: 15px;
+        background: rgba(0, 0, 0, 0.35);
+    }
+}
+
+@media (max-width: 480px) {
+    .made-by-dou {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+        bottom: 10px;
+        right: 10px;
+    }
+}
