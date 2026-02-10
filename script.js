@@ -351,31 +351,69 @@ class MusicSystem {
     constructor() {
         this.bgMusic = document.getElementById('bgMusic');
         this.musicToggle = document.getElementById('musicToggle');
+        this.volumeDown = document.getElementById('volumeDown');
+        this.volumeUp = document.getElementById('volumeUp');
         this.musicText = document.querySelector('.music-text');
         this.musicIcon = document.querySelector('.music-icon');
         
         this.isPlaying = false;
-        this.volume = 0.5; // %50 ses
+        this.volume = 0.5; // %50 ses (0.0 - 1.0 arası)
         
         this.init();
     }
     
     init() {
-        if (!this.bgMusic || !this.musicToggle) {
-            console.log("❌ Müzik elementi veya buton bulunamadı");
+        console.log("🎵 Müzik sistemi başlatılıyor...");
+        
+        if (!this.bgMusic) {
+            console.error("❌ Müzik elementi bulunamadı!");
             return;
         }
         
-        console.log("✅ Müzik sistemi hazır");
-        
         // Müzik ayarları
         this.bgMusic.volume = this.volume;
+        this.bgMusic.loop = true;
         
-        // Buton event'ini bağla
-        this.musicToggle.addEventListener('click', () => this.toggleMusic());
+        // Event listener'ları bağla
+        this.setupEventListeners();
         
-        // Müziği başlatmaya çalış
+        // Müziği başlat
         this.startMusic();
+    }
+    
+    setupEventListeners() {
+        // Müzik aç/kapa
+        if (this.musicToggle) {
+            this.musicToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggleMusic();
+            });
+        }
+        
+        // Ses azalt
+        if (this.volumeDown) {
+            this.volumeDown.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.adjustVolume(-0.1); // %10 azalt
+            });
+        }
+        
+        // Ses artır
+        if (this.volumeUp) {
+            this.volumeUp.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.adjustVolume(0.1); // %10 artır
+            });
+        }
+        
+        // Sayfa görünürlüğü değişince müziği kontrol et
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && this.isPlaying) {
+                this.bgMusic.pause();
+            } else if (!document.hidden && this.isPlaying) {
+                this.bgMusic.play().catch(e => console.log("Geri dönüşte müzik hatası:", e));
+            }
+        });
     }
     
     startMusic() {
@@ -385,17 +423,16 @@ class MusicSystem {
         
         this.bgMusic.play()
             .then(() => {
-                console.log("🎶 Müzik başladı!");
+                console.log("✅ Müzik başladı!");
                 this.isPlaying = true;
                 this.updateUI();
             })
             .catch(error => {
                 console.log("⚠️ Otomatik başlatma başarısız:", error.name);
-                this.isPlaying = false;
-                this.updateUI();
+                console.log("ℹ️ Kullanıcı tıklaması bekleniyor...");
                 
-                // Kullanıcıya tıklama için mesaj göster
-                this.showHint();
+                // Kullanıcı tıklayınca başlat
+                this.waitForUserInteraction();
             });
     }
     
@@ -416,70 +453,131 @@ class MusicSystem {
                 })
                 .catch(error => {
                     console.log("❌ Müzik başlatılamadı:", error);
-                    alert("Müzik başlatılamadı. Lütfen sayfayı yenileyin veya başka bir tarayıcı deneyin.");
+                    alert("Müzik başlatılamadı. Lütfen sayfayı yenileyin.");
                 });
         }
         
         this.updateUI();
     }
     
+    adjustVolume(change) {
+        if (!this.bgMusic) return;
+        
+        this.volume += change;
+        
+        // Sınırları kontrol et (0.0 - 1.0)
+        if (this.volume < 0) this.volume = 0;
+        if (this.volume > 1) this.volume = 1;
+        
+        // Ses seviyesini güncelle
+        this.bgMusic.volume = this.volume;
+        
+        // Ses ikonlarını güncelle
+        this.updateVolumeIcons();
+        
+        // Feedback göster
+        this.showVolumeFeedback(Math.round(this.volume * 100));
+    }
+    
     updateUI() {
         if (!this.musicToggle || !this.musicText || !this.musicIcon) return;
         
         if (this.isPlaying) {
-            this.musicText.textContent = 'Müzik: AÇIK';
+            this.musicText.textContent = 'AÇIK';
             this.musicIcon.textContent = '🎵';
-            this.musicToggle.classList.add('playing');
+            this.musicToggle.classList.add('active');
         } else {
-            this.musicText.textContent = 'Müzik: KAPALI';
+            this.musicText.textContent = 'KAPALI';
             this.musicIcon.textContent = '🔇';
-            this.musicToggle.classList.remove('playing');
+            this.musicToggle.classList.remove('active');
         }
     }
     
-    showHint() {
-        // Eğer müzik başlatılamazsa buton text'ini değiştir
-        if (this.musicText) {
-            this.musicText.textContent = 'TIKLA BAŞLAT';
-            this.musicIcon.textContent = '▶️';
+    updateVolumeIcons() {
+        if (!this.volumeDown || !this.volumeUp) return;
+        
+        // Ses seviyesine göre ikonları güncelle
+        if (this.volume === 0) {
+            this.volumeDown.textContent = '🔇';
+        } else if (this.volume < 0.3) {
+            this.volumeDown.textContent = '🔈';
+        } else if (this.volume < 0.7) {
+            this.volumeDown.textContent = '🔉';
+        } else {
+            this.volumeDown.textContent = '🔊';
         }
         
-        // Kullanıcı tıklayınca müziği başlat
-        const startOnClick = () => {
+        // Volume up ikonu her zaman aynı
+        this.volumeUp.textContent = '🔊';
+    }
+    
+    showVolumeFeedback(percent) {
+        // Eski feedback'leri temizle
+        const oldFeedback = document.querySelector('.volume-display');
+        if (oldFeedback) oldFeedback.remove();
+        
+        // Yeni feedback oluştur
+        const feedback = document.createElement('div');
+        feedback.className = 'volume-display';
+        
+        // İkon seç
+        let icon = '🔊';
+        if (percent === 0) icon = '🔇';
+        else if (percent < 30) icon = '🔈';
+        else if (percent < 70) icon = '🔉';
+        
+        feedback.textContent = `${icon} ${percent}%`;
+        
+        document.body.appendChild(feedback);
+        
+        // 1 saniye sonra kaldır
+        setTimeout(() => {
+            feedback.remove();
+        }, 1000);
+    }
+    
+    waitForUserInteraction() {
+        const startOnInteraction = () => {
             if (!this.isPlaying) {
                 this.bgMusic.play()
                     .then(() => {
                         this.isPlaying = true;
                         this.updateUI();
-                        console.log("✅ Kullanıcı tıklamasıyla müzik başladı");
+                        console.log("✅ Kullanıcı etkileşimiyle müzik başladı");
                     })
                     .catch(e => {
                         console.log("❌ Hala başlatılamadı:", e);
                     });
             }
             
-            // Event'leri temizle
-            document.removeEventListener('click', startOnClick);
-            document.removeEventListener('touchstart', startOnClick);
+            // Event listener'ları kaldır
+            document.removeEventListener('click', startOnInteraction);
+            document.removeEventListener('touchstart', startOnInteraction);
         };
         
-        // Tüm sayfada tıklamayı dinle
-        document.addEventListener('click', startOnClick);
-        document.addEventListener('touchstart', startOnClick);
+        // Tüm sayfada tıklama/touch event'lerini dinle
+        document.addEventListener('click', startOnInteraction);
+        document.addEventListener('touchstart', startOnInteraction);
+        
+        // Buton text'ini değiştir
+        if (this.musicText) {
+            this.musicText.textContent = 'TIKLA';
+            this.musicIcon.textContent = '▶️';
+        }
     }
 }
 
 // Müzik sistemini başlat
-let musicSystem = null;
-
 document.addEventListener('DOMContentLoaded', () => {
     // Oyunu başlat
     const game = new Game();
     window.game = game;
     
     // Müzik sistemini başlat
-    musicSystem = new MusicSystem();
-    window.musicSystem = musicSystem;
+    setTimeout(() => {
+        const musicSystem = new MusicSystem();
+        window.musicSystem = musicSystem;
+    }, 500);
     
-    console.log("🎮 Oyun ve müzik sistemi hazır!");
+    console.log("🎮 Sistem hazır!");
 });
