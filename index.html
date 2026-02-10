@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="tr">
+    <!-- JavaScript -->
+<script src="script.js"></script>
+<!-- type="module" SİLİNECEK -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adoşşş 💖</title>
+    <title>duruyuseviyorum</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,6 +17,38 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- BLACK OVERLAY (Açılış Ekranı) -->
+<div class="black-overlay" id="blackOverlay">
+    <div class="start-container">
+        <div class="start-heart">💖</div>
+        <h1 class="start-title">Selam</h1>
+        <p class="start-subtitle"></p>
+        <button class="gold-button" id="startButton">
+            <span class="button-content">
+                <span class="button-text">BAŞLA</span>
+                <span class="button-icon">🎵</span>
+            </span>
+            <span class="button-glow"></span>
+        </button>
+        
+        <!-- KOD GİRİŞ ALANI -->
+        <div class="code-input-container">
+            <input type="text" 
+                   id="codeInput" 
+                   maxlength="4" 
+                   placeholder=""
+                   class="code-input"
+                   autocomplete="off">
+            <button id="codeSubmit" class="code-submit">🔓</button>
+        </div>
+        <p class="code-hint"></p>
+    </div>
+</div>
+    
+    <!-- Overlay Effects -->
+    <div class="effect-overlay" id="damage-overlay"></div>
+    <!-- ... diğer kodlar tamamen aynı kalacak ... -->
+    
     <!-- Overlay Effects -->
     <div class="effect-overlay" id="damage-overlay"></div>
     <div class="damage-edge left"></div>
@@ -82,10 +117,11 @@
     </div>
     
     <!-- Made By Dou -->
-    <div class="made-by-dou">Made By Dou</div>
+    <div class="made-by-dou">Ali‪‪❤︎‬Duru</div>
     
     <!-- Audio Elements -->
-    <audio id="bgMusic" loop>
+    <!-- Audio Elements -->
+    <audio id="bgMusic" loop autoplay>
         <source src="templatemusic.mp3" type="audio/mpeg">
     </audio>
     
